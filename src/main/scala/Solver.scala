@@ -11,11 +11,9 @@ object Solver extends App {
 	val dictSrc =Source.fromFile(new File("/Users/James/Desktop/CountdownTrie/src/main/resources/dictionary.txt"))
 	val words = dictSrc.getLines().toList
 	
-	val hmap = new HashMap[Trie[Char], Trie[Char]]()
-  for(c <- 'a' to 'z') hmap + (Trie(Some(c), new HashMap[Trie[Char], Trie[Char]]) -> Trie(None, new HashMap[Trie[Char], Trie[Char]]))
-  val dict = Trie(None, hmap)
+	val dictTrie = TrieNode(None, false, None)
+	words.map(dictTrie.addWord)
 
-	println(dict.mapping.mkString("\n"))
-
+	println(dictTrie.getWords().mkString("\n"))
 
 }
