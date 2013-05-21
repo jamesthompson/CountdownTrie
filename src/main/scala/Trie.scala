@@ -52,7 +52,7 @@ case class TrieNode(val c: Option[Char],
 	def printTrie(level: Int = 0): String = {
     var trieString: String = ""
     val kids = this.children.flatMap { node => node } 
-    kids.foreach { node => trieString += "-" * level + node.toString + "\n" + node.printTrie(node.depth()) }
+    kids.foreach { node => trieString +=  { if(node.isWord) "-" * level + node.toString + "\n" else "" } + node.printTrie(node.depth()) }
     trieString
   }
 
@@ -60,7 +60,6 @@ case class TrieNode(val c: Option[Char],
 		case Some(p) => p.toString + c.getOrElse("").toString
 		case None 	 => ""
 	}
-
 
 }
 
