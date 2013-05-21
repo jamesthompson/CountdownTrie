@@ -37,6 +37,6 @@ case class TrieNode(val c: Option[Char],
 	// }
 
 	override def toString : String = 
-		if(parent == None) "" else parent.get.toString + c.getOrElse("").toString
+	 if(parent == None) "" else parent.get.toString + c.getOrElse("").toString
 }
 
