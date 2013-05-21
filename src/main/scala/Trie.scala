@@ -7,31 +7,48 @@ case class TrieNode(val c: Option[Char],
 
 	def hasChildren = !children.forall(_ == None)
 
+	def depth(i: Int = 0) : Int = parent match { 
+		case Some(p) => p.depth(i + 1) 
+		case    None => i
+	}
+
 	def addWord(word: String) : Unit = 
 		if(word.isEmpty) () else {
-		val char = word.head - 'a'
-		if(children(char) == None) 
-			children(char) = Some(TrieNode(Some(word.head), false, Some(this)))
-		if(word.length > 1) children(char).get.addWord(word.tail) else 
-			children(char) = Some(TrieNode(Some(word.head), true, Some(this)))
+			val char = word.head - 'a'
+			if(children(char) == None) 
+				children(char) = Some(TrieNode(Some(word.head), false, Some(this)))
+			if(word.length > 1) children(char).get.addWord(word.tail) else 
+				children(char) = Some(TrieNode(Some(word.head), true, Some(this)))
 	}
 
 	def getNode(char: Char) : Option[TrieNode] = children(char - 'a')
 
 	def getWords(l : List[String] = List[String]()) : List[String] = 
 		(isWord, hasChildren) match {
-			case (true, true) => toString :: children.flatMap(cw => cw).toList.flatMap { 
-				(node: TrieNode) => node.getWords(node.toString :: l) }.reverse
-			case (false, true) => children.flatMap(cw => cw).toList.flatMap { 
-				(node: TrieNode) => node.getWords(node.toString :: l) }
-			case (true, false) => List(toString)
+			case   (true, true) => toString :: children.flatMap(cw => cw).toList.flatMap { 
+															(node: TrieNode)  => node.getWords(node.toString :: l) }.reverse
+			case 	(false, true) => children.flatMap(cw => cw).toList.flatMap { 
+															(node: TrieNode)  => node.getWords(node.toString :: l) }
+			case  (true, false) => List(toString)
 			case (false, false) => Nil
 	}
 
-	def getStringPrefix(s: String, node: TrieNode = this) = 
-		s.flatMap(node.getNode(_)).flatMap(_.getWords())
+	def wordsFromPrefix(s: String, node: TrieNode = this) = 
+		nodeForPrefix(s, node) match {
+			case Some(n) => n.getWords()
+			case None => Nil
+		}
 
-	override def toString : String = 
-	 if(parent == None) "" else parent.get.toString + c.getOrElse("").toString
+	def nodeForPrefix(s: String, node: TrieNode = this) 
+		: Option[TrieNode] = s.toList match {
+			case Nil => Some(node)
+			case h :: t => node.getNode(s.head).flatMap { nodeForPrefix(s.tail.toString, _) }
+	}
+
+	override def toString : String = parent match {
+		case Some(p) => p.toString + c.getOrElse("").toString
+		case None 	 => ""
+	}
+
 }
 

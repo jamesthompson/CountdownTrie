@@ -13,6 +13,9 @@ object Solver extends App {
 	// Load all the words
 	words.map(dictTrie.addWord)
 
-	println(dictTrie.getWords().mkString("\n"))
+	println(dictTrie.wordsFromPrefix("xp"))
+	// println(dictTrie.nodeForPrefix("fuck").get.depth())
+
+	// println(dictTrie.wordsFromPrefix("").mkString("\n"))
 
 }
