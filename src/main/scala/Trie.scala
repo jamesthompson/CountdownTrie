@@ -18,23 +18,18 @@ case class TrieNode(val c: Option[Char],
 
 	def getNode(char: Char) : Option[TrieNode] = children(char - 'a')
 
-	def getWords(l : List[String] = List[String]()) : List[String] = (isWord, hasChildren) match {
-		case (true, true) => toString :: children.flatMap(cw => cw).toList.flatMap { (node: TrieNode) => node.getWords(node.toString :: l) }.reverse
-		case (false, true) => children.flatMap(cw => cw).toList.flatMap { (node: TrieNode) => node.getWords(node.toString :: l) }
-		case (true, false) => List(toString)
-		case (false, false) => Nil
+	def getWords(l : List[String] = List[String]()) : List[String] = 
+		(isWord, hasChildren) match {
+			case (true, true) => toString :: children.flatMap(cw => cw).toList.flatMap { 
+				(node: TrieNode) => node.getWords(node.toString :: l) }.reverse
+			case (false, true) => children.flatMap(cw => cw).toList.flatMap { 
+				(node: TrieNode) => node.getWords(node.toString :: l) }
+			case (true, false) => List(toString)
+			case (false, false) => Nil
 	}
 
 	def getStringPrefix(s: String, node: TrieNode = this) = 
 		s.flatMap(node.getNode(_)).flatMap(_.getWords())
-
-		// Figure out how to do countdown!
-	// def possibleWords(s: String, node: TrieNode = this) : Seq[TrieNode] = {
-	// 	for { c <- s
-	// 				child <- node.getNode(c)
-
-	// 	}
-	// }
 
 	override def toString : String = 
 	 if(parent == None) "" else parent.get.toString + c.getOrElse("").toString
