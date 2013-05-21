@@ -1,7 +1,5 @@
 package countdown
 
-import scala.collection.mutable.ArrayBuffer
-
 case class TrieNode(val c: Option[Char], 
 										val isWord: Boolean,
 										val parent: Option[TrieNode],
