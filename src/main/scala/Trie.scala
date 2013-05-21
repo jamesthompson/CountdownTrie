@@ -1,5 +1,7 @@
 package countdown
 
+import annotation.tailrec
+
 case class TrieNode(val c: Option[Char], 
 										val isWord: Boolean,
 										val parent: Option[TrieNode],
@@ -7,12 +9,12 @@ case class TrieNode(val c: Option[Char],
 
 	def hasChildren = !children.forall(_ == None)
 
-	def depth(i: Int = 0) : Int = parent match { 
+	@tailrec final def depth(i: Int = 0) : Int = parent match { 
 		case Some(p) => p.depth(i + 1) 
-		case    None => i
+		case None => i
 	}
 
-	def addWord(word: String) : Unit = 
+	@tailrec final def addWord(word: String) : Unit = 
 		if(word.isEmpty) () else {
 			val char = word.head - 'a'
 			if(children(char) == None) 
@@ -45,10 +47,20 @@ case class TrieNode(val c: Option[Char],
 			case h :: t => node.getNode(s.head).flatMap { nodeForPrefix(s.tail.toString, _) }
 	}
 
+	def graph : Unit = println(printTrie())
+
+	def printTrie(level: Int = 0): String = {
+    var trieString: String = ""
+    val kids = this.children.flatMap { node => node } 
+    kids.foreach { node => trieString += "-" * level + node.toString + "\n" + node.printTrie(node.depth()) }
+    trieString
+  }
+
 	override def toString : String = parent match {
 		case Some(p) => p.toString + c.getOrElse("").toString
 		case None 	 => ""
 	}
+
 
 }
 
