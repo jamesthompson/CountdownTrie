@@ -14,6 +14,6 @@ object Solver extends App {
 	val dictTrie = TrieNode(None, false, None)
 	words.map(dictTrie.addWord)
 
-	println(dictTrie.getWords().mkString("\n"))
+	println(dictTrie.checkWords("a").mkString("\n"))
 
 }

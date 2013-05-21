@@ -25,6 +25,17 @@ case class TrieNode(val c: Option[Char],
 		case (false, false) => Nil
 	}
 
+	def getStringPrefix(s: String, node: TrieNode = this) = 
+		s.flatMap(node.getNode(_)).flatMap(_.getWords())
+
+		// Figure out how to do countdown!
+	// def possibleWords(s: String, node: TrieNode = this) : Seq[TrieNode] = {
+	// 	for { c <- s
+	// 				child <- node.getNode(c)
+
+	// 	}
+	// }
+
 	override def toString : String = 
 		if(parent == None) "" else parent.get.toString + c.getOrElse("").toString
 }
